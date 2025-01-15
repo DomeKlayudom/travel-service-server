@@ -1,10 +1,20 @@
 const express = require('express')
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const traverllerRoute = require('./routes/traveller.route.js');
+const traverlRoute = require('./routes/travel.route.js');
+
 require('dotenv').config(
     
 );
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(bodyParser.json());
+app.use(cors());
+app.use('/traveller', traverllerRoute);
+app.use('/travel', traverlRoute);
 
 app.get('/', (req, res) => {
     res.json({
