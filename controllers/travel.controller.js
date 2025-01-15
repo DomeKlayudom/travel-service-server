@@ -50,7 +50,7 @@ exports.getAllTravel = async (req, res) => {
         const result = await Travel.findAll(
             {
                 where: {
-                    travelerId: req.params.travelerId,
+                    travellerId: req.params.travellerId,
             }
     });
     if (result) {
