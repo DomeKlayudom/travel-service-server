@@ -3,7 +3,7 @@ const travelCtrl = require('./../controllers/travel.controller.js');
 const express = require('express');
 const router = express.Router();
 
-router.post('/',travelCtrl.createTravel);
+router.post('/',travelCtrl.uploadTravel,travelCtrl.createTravel);
 
 router.put('/:travelId',travelCtrl.editTravel);
 

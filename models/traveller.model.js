@@ -24,12 +24,17 @@ const Traveller = sequelize.define('traveller_tb', {
         allowNull: false,
         field: "travellerPassword"
     },
+    travellerImage: {
+        type: Sequelize.STRING(150),
+        allowNull: false,
+        field: "travellerImage"
+    },
 },
-{
-    tableName: "traveller_tb",
-    timestamps: false,
-    freezeTableName: true
-}
+    {
+        tableName: "traveller_tb",
+        timestamps: false,
+        freezeTableName: true
+    }
 );
 
 module.exports = Traveller;
