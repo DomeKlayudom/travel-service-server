@@ -7,6 +7,6 @@ router.post("/",travellerCtrl.uploadTraveller,travellerCtrl.createTraveller);
 
 router.get("/:travellerEmail/:travellerPassword",travellerCtrl.checkLoginTraveller);
 
-router.put("/:travellerId",travellerCtrl.editTraveller);
+router.put("/:travellerId",travellerCtrl.uploadTraveller,travellerCtrl.editTraveller);
 
 module.exports = router;

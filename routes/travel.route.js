@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/',travelCtrl.uploadTravel,travelCtrl.createTravel);
 
-router.put('/:travelId',travelCtrl.editTravel);
+router.put('/:travelId',travelCtrl.uploadTravel,travelCtrl.editTravel);
 
 router.get('/:travellerId',travelCtrl.getAllTravel);
 

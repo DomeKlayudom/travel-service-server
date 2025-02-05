@@ -2,22 +2,31 @@ const { where } = require('sequelize');
 const Travel = require('./../models/travel.model.js');
 const path = require('path');
 const multer = require('multer');
-
-exports.createTravel = async (req, res) => {
-    try {
-        const result = await Travel.create(req.body);
-        res.status(201).json({
-            message: 'Travel created successfully',
-            data: result
-        });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+const fs = require('fs');
 
 exports.editTravel = async (req, res) => {
+
     try {
-        const result = await Travel.update(req.body, {
+        let data = {
+            ...req.body,
+        }
+        if (req.file) {
+            const travel = await Travel.findOne({
+                where: {
+                    travelId: req.params.travelId
+                }
+            });
+            if (travel.travelImage) {
+                const oldImagePath = "images\\travel\\" + travel.travelImage;
+                fs.unlink(oldImagePath, (err) => {
+                    console.log(err);
+                });
+            }
+            data.travelImage = req.file.path.replace("images\\travel\\", "");
+        } else {
+            delete data.travelImage;
+        }
+        const result = await Travel.update(data, {
             where: {
                 travelId: req.params.travelId
             }
@@ -33,6 +42,18 @@ exports.editTravel = async (req, res) => {
 
 exports.deleteTravel = async (req, res) => {
     try {
+        const travel = await Travel.findOne({
+            where: {
+                travelId: req.params.travelId
+            }
+        });
+        if (travel.travelImage) {
+            const oldImagePath = "images\\travel\\" + travel.travelImage;
+            fs.unlink(oldImagePath, (err) => {
+                console.log(err);
+            });
+        }
+
         const result = await Travel.destroy({
             where: {
                 travelId: req.params.travelId
@@ -75,7 +96,7 @@ exports.createTravel = async (req, res) => {
     try {
         let data = {
             ...req.body,
-            travelImage: req.file.path.replace("images\\travel\\", ""),
+            travelImage: req.file ? req.file.path.replace("images\\travel\\", "") : "",
         }
         const result = await Travel.create(data);
         res.status(201).json({

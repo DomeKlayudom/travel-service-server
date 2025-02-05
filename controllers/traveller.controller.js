@@ -2,18 +2,7 @@ const Traveller = require('./../models/traveller.model.js');
 const path = require('path');
 const multer = require('multer');
 const exp = require('constants');
-
-exports.createTraveller = async (req, res) => {
-    try {
-        const result = await Traveller.create(req.body);
-        res.status(201).json({
-            message: 'Traveller created successfully',
-            data: result
-        });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+const fs = require('fs');
 
 exports.checkLoginTraveller = async (req, res) => {
     try {
@@ -41,9 +30,10 @@ exports.checkLoginTraveller = async (req, res) => {
 
 exports.createTraveller = async (req, res) => {
     try {
+
         let data = {
             ...req.body,
-            travellerImage: req.file.path.replace("images\\traveller\\", ""),
+            travellerImage: req.file ? req.file.path.replace("images\\traveller\\", "") : "",
         }
         const result = await Traveller.create(data);
         res.status(201).json({
@@ -57,12 +47,34 @@ exports.createTraveller = async (req, res) => {
 
 exports.editTraveller = async (req, res) => {
     try {
-        const result = await Traveller.update(req.body, {
+        let data = {
+            ...req.body,
+        }
+        if (req.file) {
+            const traveller = await Traveller.findOne({
+                where: {
+                    travellerId: req.params.travellerId
+                }
+            });
+            if (traveller.travellerImage) {
+                const oldImagePath = "images\\traveller\\" + traveller.travellerImage;
+                fs.unlink(oldImagePath,(err)=>{
+                    console.log(err);
+                });
+            }
+
+            data.travellerImage = req.file.path.replace("images\\traveller\\", "");
+        }else{
+            delete data.travellerImage;
+        }
+
+
+        const result = await Traveller.update(data, {
             where: {
                 travellerId: req.params.travellerId
             }
         });
-        req.status(200).json({
+        res.status(200).json({
             message: 'Traveller updated successfully',
             data: result
         });
@@ -93,3 +105,4 @@ exports.uploadTraveller = multer({
         cb('Give proper files formate to upload');
     }
 }).single('travellerImage');
+
