@@ -15,6 +15,8 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use('/traveller', traverllerRoute);
 app.use('/travel', traverlRoute);
+app.use("/images/traveller/",express.static("images/traveller"));
+app.use("/images/travel",express.static("images/travel"));
 
 app.get('/', (req, res) => {
     res.json({

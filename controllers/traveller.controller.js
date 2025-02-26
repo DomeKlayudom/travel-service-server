@@ -13,7 +13,7 @@ exports.checkLoginTraveller = async (req, res) => {
             }
         });
         if (result) {
-            res.status(200).json({
+            res.status(201).json({
                 message: 'Traveller login successfully',
                 data: result
             });
@@ -30,7 +30,6 @@ exports.checkLoginTraveller = async (req, res) => {
 
 exports.createTraveller = async (req, res) => {
     try {
-
         let data = {
             ...req.body,
             travellerImage: req.file ? req.file.path.replace("images\\traveller\\", "") : "",
